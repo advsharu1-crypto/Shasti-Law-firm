@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap; src: url('/assets/fonts/inter-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap; src: url('/assets/fonts/inter-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap; src: url('/assets/fonts/inter-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap; src: url('/assets/fonts/inter-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 600; font-display: swap; src: url('/assets/fonts/playfair-display-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 700; font-display: swap; src: url('/assets/fonts/playfair-display-latin-700-normal.woff2') format('woff2'); }
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  body { @apply bg-ivory-100 text-charcoal-800 font-body antialiased; }
+  :focus-visible { outline: 2px solid #DFBA47; outline-offset: 2px; }
+  summary { list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+}
+
+@layer components {
+  .gold-text {
+    background: linear-gradient(135deg, #F5D77F 0%, #C9A227 50%, #B8901A 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .dd-panel { visibility: hidden; opacity: 0; transition: opacity .15s; }
+  .dd:hover .dd-panel, .dd:focus-within .dd-panel, .dd.open .dd-panel { visibility: visible; opacity: 1; }
+  .faq[open] .faq-icon { transform: rotate(45deg); }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gold-500 hover:bg-gold-400 text-navy-950 font-semibold text-sm transition-colors; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/40 text-white font-medium text-sm transition-colors; }
+}
+
+/* Homepage practice-group carousels */
+.pg-track { scroll-padding-inline: 1.25rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.pg-track::-webkit-scrollbar { display: none; }
+@media (min-width: 640px) { .pg-track { scroll-padding-inline: 2rem; } }
+.pg-ctl { display: none; gap: .5rem; }
+.pg-ctl.is-ready { display: none; }
+@media (min-width: 768px) { .pg-ctl.is-ready { display: flex; } }
+.pg-wrap::before, .pg-wrap::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2rem; pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 1; }
+.pg-wrap::before { left: 0; background: linear-gradient(to right, var(--fade), transparent); }
+.pg-wrap::after { right: 0; background: linear-gradient(to left, var(--fade), transparent); }
+.pg-wrap.has-prev::before, .pg-wrap.has-next::after { opacity: 1; }
+.pg-track { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { .pg-track { scroll-behavior: auto; } }
+.pg-pre { opacity: 0; }
+.pg-in { opacity: 1; transition: opacity .6s ease; }
+.pg-pre .pg-card, .pg-in .pg-card { }
+.pg-in .pg-card { animation: pg-rise .55s ease backwards; }
+.pg-in .pg-card:nth-child(2) { animation-delay: .08s; }
+.pg-in .pg-card:nth-child(3) { animation-delay: .16s; }
+.pg-in .pg-card:nth-child(n+4) { animation-delay: .24s; }
+@keyframes pg-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.pg-track.pg-edge { scroll-padding-inline: 1rem; }
+@media (min-width: 640px) { .pg-track.pg-edge { scroll-padding-inline: 1.5rem; } }
+@media (min-width: 1024px) { .pg-track.pg-edge { scroll-padding-inline: 2rem; } }
+.pg-progress { transition: transform .2s ease-out; will-change: transform; }
+
+/* Scroll-driven pinning: only the card row (the stage) sticks */
+.pg-pin, .pg-stage { position: relative; }
+.pg-section.is-pinned .pg-stage { position: sticky; top: var(--pin-top, 5.5rem); z-index: 2; }
+.is-pinned .pg-wrap { overflow: hidden; }
+.is-pinned .pg-track { overflow: visible; scroll-snap-type: none; scroll-behavior: auto; will-change: transform; }
+.is-enter .pg-track { overflow: visible; scroll-snap-type: none; }
+.is-pinned .pg-ctl, .is-enter .pg-ctl { display: none !important; }
+.is-pinned .pg-card, .is-enter .pg-card { animation: none !important; }
+.pg-pbar { display: none; height: 4px; border-radius: 2px; background: rgba(18, 33, 63, .15); overflow: hidden; margin: .25rem 0 0; }
+.pg-pbar span { display: block; height: 100%; background: #C9A227; transform-origin: left; transform: scaleX(0); }
+.is-pinned .pg-pbar { display: block; }
